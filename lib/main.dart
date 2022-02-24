@@ -4,10 +4,26 @@ import 'package:get/get.dart';
 import 'controller.dart';
 
 void main() {
-  runApp(GetMaterialApp(enableLog: true, home: Home()));
+  runApp(GetMaterialApp(
+    enableLog: true,
+    home: Home(),
+    getPages: [
+      GetPage(
+        name: Home.routeName,
+        page: () => Home(),
+        binding: HomeBinding(),
+      ),
+      GetPage(
+        name: Other.routeName,
+        page: () => Other(),
+        binding: DetailsBinding(),
+      ),
+    ],
+  ));
 }
 
 class Home extends StatelessWidget {
+  static const String routeName = "/";
   @override
   Widget build(context) {
     // Instanciez votre classe en utilisant Get.put() pour le rendre disponible pour tous les routes "descendantes".
@@ -27,6 +43,7 @@ class Home extends StatelessWidget {
 }
 
 class Other extends StatelessWidget {
+  static const String routeName = "/other";
   // Vous pouvez demander à Get de trouver un contrôleur utilisé par une autre page et de vous y rediriger.
   final Controller c = Get.find();
 
@@ -34,5 +51,19 @@ class Other extends StatelessWidget {
   Widget build(context) {
     // Accéder à la variable 'count' qui est mise à jour
     return Scaffold(body: Center(child: Text("${c.count}")));
+  }
+}
+
+class HomeBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<Controller>(() => Controller());
+  }
+}
+
+class DetailsBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<Controller>(() => Controller());
   }
 }
